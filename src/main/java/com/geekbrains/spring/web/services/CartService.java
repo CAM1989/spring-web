@@ -38,7 +38,7 @@ public class CartService {
     @CachePut(value = "Cart", key = "#cartName")
     public Cart addProductByIdToCart(Long id, String cartName){
         Cart cart = getCurrentCart(cartName);
-        if(!getCurrentCart(cartName).addProductCount(id)){
+        if(!cart.addProductCount(id)){
             Product product = productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Не удалось найти продукт"));
             cart.addProduct(product);
         }
@@ -46,9 +46,10 @@ public class CartService {
     }
 
     @CachePut(value = "Cart", key = "#cartName")
-    public void clear(String cartName){
+    public Cart clear(String cartName){
         Cart cart = getCurrentCart(cartName);
         cart.clear();
+        return cart;
     }
 
 //    public Cart getCurrentCart(String cartKey) {
